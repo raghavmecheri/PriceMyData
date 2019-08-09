@@ -60,6 +60,9 @@ const processZipFile = (zipData, fbValueMap, daysCount) => {
             }
 
             console.log(inputs);
+            console.log(hasPeerGroup);
+            console.log(hasFacial);
+            console.log(advertisers);
             
             const fbMock = {
                 likes:0.01,

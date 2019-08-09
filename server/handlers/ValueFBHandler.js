@@ -8,11 +8,10 @@ const path = require('path');
 
 export const valueFBData = async (req, res) => {
     let username = req.body.username;
-    let num_days = req.body.days;
     let myZip = req.file;
     AWSHelper.dumpFBData(myZip, username)
     let valueMap = await MongoHelper.getFBMap();
-    let value = await processZipFile(myZip, valueMap, num_days)
+    let value = await processZipFile(myZip, valueMap)
     
     FileRemovalHandler.removeDirectory(myZip.path);
 
@@ -22,7 +21,7 @@ export const valueFBData = async (req, res) => {
     })
 }
 
-const processZipFile = (zipData, fbValueMap, daysCount) => {
+const processZipFile = (zipData, fbValueMap) => {
     return new Promise((resolve, reject) => {
         const zip = new StreamZip({
             file: zipData.path,
@@ -56,24 +55,40 @@ const processZipFile = (zipData, fbValueMap, daysCount) => {
                 apps,
                 addressbook,
                 interests,
-                location
+                location,
+                peers: hasPeerGroup? 1:0,
+                facial: hasFacial? 1:0
             }
 
-            console.log(inputs);
-            console.log(hasPeerGroup);
-            console.log(hasFacial);
-            console.log(advertisers);
-            
-            const fbMock = {
-                likes:0.01,
-                apps:0.5,
-                peers: 0.3,
-                facial: 1,
-                addressbook: 1.3,
-                interests: 0.09,
-                location: 1 
-            }
-            resolve(100)
+            const dataValue = await computeDataValue(inputs, fbValueMap)
+            // console.log(dataValue);
+            // console.log(advertisers);
+            resolve({dataValue, advertisers})
         })
+    })
+}
+
+const computeDataValue = (inputs, valueMap) => {
+    return new Promise((resolve, reject) => {
+        let sum = 0;
+        let ctr = Object.keys(inputs).length
+        let count = 0;
+        for (var key in inputs) {
+            if (valueMap.hasOwnProperty(key) && inputs.hasOwnProperty(key)) {
+                // console.log(key)
+                if(key != "peers") {
+                    sum += inputs[key] * valueMap[key]
+                }
+            }
+            count += 1;
+            if(count >= (ctr-1)) {
+                if(inputs.hasOwnProperty("peers") && valueMap.hasOwnProperty("peers")) {
+                    if(inputs["peers"]) {
+                        sum *= valueMap["peers"]
+                    }
+                }
+                resolve(sum);
+            }
+        }
     })
 }

@@ -1,0 +1,55 @@
+.containerDiv {
+    background-image: url("../resources/backgroundimg.jpeg");
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    color: #ffffff;
+}
+
+.center {
+    margin-right:60vw;
+    padding-top: 30vh;
+    text-align: center;
+}
+
+.centerTitle {
+    margin-top:2vh;
+}
+
+.centerSubtitle {
+    margin-top:3vh;
+    padding-left:0.5vw;
+    padding-right:0.5vw;
+}
+
+.buttons {
+    display:inline-block;
+    text-align: center;
+}
+
+.buttonStyle {
+    float: left;
+    margin-top: 3vh;
+    background-color: transparent;
+    border-color: #ffffff;
+}
+
+.circularButton {
+    position: absolute;
+    top:1vh;
+    left:1vw;
+    height:5vh;
+    width:5vh;
+    border-radius: 50%;
+    background-color: transparent;
+    border-color: #ffffff;
+}
+
+.readMore {
+    margin-top: 2vh;
+}
+
+.readMore a {
+    color: #ffffff;
+    text-decoration: underline;
+}

@@ -27,7 +27,7 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /\.(png|svg|jpg|gif|jpeg)$/,
         loader: "file-loader",
         // Removed a / from /static
         options: { name: 'static/[name].[ext]' }

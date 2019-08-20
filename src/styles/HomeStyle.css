@@ -7,7 +7,7 @@
 }
 
 .center {
-    margin-right:60vw;
+    margin-right:55vw;
     padding-top: 30vh;
     text-align: center;
 }
@@ -52,4 +52,40 @@
 .readMore a {
     color: #ffffff;
     text-decoration: underline;
+}
+
+/*
+Begin PriceData CSS
+*/
+
+.backButton {
+    float: left;
+    margin-top: 3vh;
+    background-color: transparent;
+    border-color: #ffffff;
+}
+
+.uploadContainer {
+   background-color: #007bff;
+   border-radius: 2%;
+   margin-left: 3vw;
+   margin-right: 3vw;
+   padding-top: 5vh;
+   padding-bottom: 5vh;
+}
+
+.buttonHold {
+    margin-bottom: 2vh;
+    margin-top: 1vh;
+    display: inline-block;
+}
+
+.toggled.active {
+    background-color: #007bff !important;
+    border: none !important;
+}
+
+.toggled {
+    background-color: #0062cc !important;
+    border: none !important;
 }

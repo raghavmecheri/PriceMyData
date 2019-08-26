@@ -86,6 +86,7 @@ Begin PriceData CSS
 }
 
 .toggled {
-    background-color: #0062cc !important;
+    background-color: hsl(211, 100%, 28%) !important;
     border: none !important;
+    box-shadow: none !important;
 }

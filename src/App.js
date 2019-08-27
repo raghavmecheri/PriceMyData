@@ -25,7 +25,7 @@ export default class App extends Component {
                 
                 {
                     priceMe ? (
-                        <div className="center" style={{paddingTop:"10vh"}}>
+                        <div className="center" style={{paddingTop:"3vh"}}>
                         <PriceData backHandler={this.backClicked} />
                         </div>
                     ) : (

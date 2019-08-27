@@ -12,7 +12,7 @@
     text-align: center;
 }
 
-.centerTitle {
+.centerElement {
     margin-top:2vh;
 }
 
@@ -59,23 +59,28 @@ Begin PriceData CSS
 */
 
 .backButton {
-    float: left;
-    margin-top: 3vh;
+    margin-top: -1vh;
+    margin-right: 38vw;
     background-color: transparent;
     border-color: #ffffff;
 }
 
 .uploadContainer {
-   background-color: #007bff;
-   border-radius: 2%;
-   margin-left: 3vw;
-   margin-right: 3vw;
-   padding-top: 5vh;
-   padding-bottom: 5vh;
+   background-color: rgba(0,0,0,0.35);
+   border-radius: 10px;
+   margin-left: 10vw;
+   margin-right: 10vw;
+   margin-bottom: 3vh;
+   padding-top: 3vh;
+   padding-bottom: 3vh;
+}
+
+.uploadContainer:hover {
+    transform: scale(1.025);
 }
 
 .buttonHold {
-    margin-bottom: 2vh;
+    margin-bottom: 3vh;
     margin-top: 1vh;
     display: inline-block;
 }
@@ -89,4 +94,37 @@ Begin PriceData CSS
     background-color: hsl(211, 100%, 28%) !important;
     border: none !important;
     box-shadow: none !important;
+}
+
+.sliderHold {
+    color: white;
+    padding-left: 13vw;
+    padding-right: 13vw;
+}
+
+.sliderHold .sliderCustom {
+    color: #007bff;
+}
+
+.submitButton {
+    margin-top: 3vh;
+    background-color: transparent;
+    border-color: #ffffff;
+    box-shadow: none !important;
+}
+
+.backButton:hover {
+    transform: scale(1.025);
+}
+
+.buttonStyle:hover {
+    transform: scale(1.025); 
+}
+
+.circularButton:hover {
+    transform: scale(1.025); 
+}
+
+.submitButton:hover {
+    transform: scale(1.025);
 }

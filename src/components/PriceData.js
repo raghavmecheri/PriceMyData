@@ -10,6 +10,8 @@ import Button from 'react-bootstrap/Button'
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 
+import ReactLoading from 'react-loading';
+
 
 const marks = [
     {
@@ -73,7 +75,9 @@ export default class PriceData extends Component {
 
     constructor(props) {
         super(props);
-        
+        this.state = {
+            isLoading: false
+        };
     }
 
     componentDidMount() {
@@ -104,6 +108,7 @@ export default class PriceData extends Component {
         payload.append("username", "raghavmecheri");
         payload.append("fbFile", this.state.uploadFile);
         const endpoint = './valueFB'
+        this.setState({isLoading:true})
         fetch(endpoint, {
             method: 'POST',
             body: payload,
@@ -111,7 +116,9 @@ export default class PriceData extends Component {
                 'Content-Type': 'application/json'
             },*/
             }).then(res => res.json()).then(response => {
-                alert(JSON.stringify(response))
+                this.setState({isLoading:false})
+                this.props.handlePrice(response);
+                //alert(JSON.stringify(response))
           })
           .catch(
             error => console.log(error)
@@ -125,6 +132,10 @@ export default class PriceData extends Component {
     }
 
     render() {
+        let {isLoading} = this.state;
+        if(isLoading) {
+            return <ReactLoading type={"spin"} color={"#007bff"} className="loadingSign" />
+        }
         return (
             <React.Fragment>
             <Button className="backButton" onClick={this.props.backHandler}>Exit</Button>

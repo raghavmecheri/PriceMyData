@@ -129,3 +129,10 @@ Begin PriceData CSS
 .submitButton:hover {
     transform: scale(1.025);
 }
+
+.loadingSign {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+}

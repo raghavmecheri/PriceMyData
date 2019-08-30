@@ -50,17 +50,20 @@ const marks = [
 
 const questionTypes = [
     {
-        title: "Sell your location?",
-        key: "loc"
+        title: "Your likes and reactions?",
+        key: "likes"
     },{
-        title: "Sell your privacy?",
-        key: "priv"
+        title: "The apps and websites that you sign into?",
+        key: "apps"
     },{
-        title: "Sell your ad?",
+        title: "Your advertiser information?",
         key: "ad"
     },{
-        title: "Sell your something?",
-        key: "sm"
+        title: "Your location?",
+        key: "loc"
+    },{
+        title: "Your facial data, friends and personal info?",
+        key: "keyinfo"
     }
 ]
 
@@ -96,24 +99,46 @@ export default class PriceData extends Component {
     }
 
     submitData = (event) => {
-        alert(JSON.stringify(this.state));
+        console.log(this.state);
+        var payload = new FormData()
+        payload.append("username", "raghavmecheri");
+        payload.append("fbFile", this.state.uploadFile);
+        const endpoint = './valueFB'
+        fetch(endpoint, {
+            method: 'POST',
+            body: payload,
+            /*headers:{
+                'Content-Type': 'application/json'
+            },*/
+            }).then(res => res.json()).then(response => {
+                alert(JSON.stringify(response))
+          })
+          .catch(
+            error => console.log(error)
+          );
+    }
+
+    setFile = (file) => {
+        this.setState({
+            uploadFile:file
+        });
     }
 
     render() {
         return (
             <React.Fragment>
             <Button className="backButton" onClick={this.props.backHandler}>Exit</Button>
-            <h3>Let's price your data</h3>
+            <h3 style={{marginTop:"-4vh"}}>Let's price your data</h3>
             <p className="readMore">Read more about this project <a href="#">here</a></p>
-            <p className="readMore">Please upload your Facebook/Google data as the downloaded .zip file. For more details on how to download the file you need, please read <a href="#">this short guide.</a></p>
+            <p className="readMore">Please upload your Facebook/Google data as a .zip file below</p>
             <ButtonToolbar className="buttonHold">
                 <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
                     <ToggleButton className="toggled" value={1}>Facebook</ToggleButton>
                     <ToggleButton className="toggled" value={2}>Google</ToggleButton>
                 </ToggleButtonGroup>
             </ButtonToolbar>
-            <DropzoneWithoutClick />
-            <h3 className="centerElement">How much would you pay?</h3>
+            <DropzoneWithoutClick handleFileSet={this.setFile}/>
+            <h4 className="centerElement">How much would you charge for:</h4>
             <div className="centerElement">
                 {
                     questionTypes.map((question) => (
@@ -136,6 +161,10 @@ export default class PriceData extends Component {
                 }
             <Button className="submitButton" onClick={this.submitData}>Price my data!</Button>
             </div>
+            <p style={{marginTop:"1.5vh", textAlign:"left", fontSize:"0.6rem", marginLeft:"2vw"}}>By using us to price your data, you agree to our <a href="#" style={{
+                color: "#ffffff",
+                textDecoration: "underline"
+            }}>terms and conditions</a></p>
             </React.Fragment>
         );
     }

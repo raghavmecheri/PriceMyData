@@ -4,7 +4,7 @@ import MongoHelper from "../MongoHelper"
 import DataReadHandler from "./DataReadHandler"
 
 const StreamZip = require('node-stream-zip');
-const path = require('path');
+const rimraf = require('rimraf');
 
 export const valueFBData = async (req, res) => {
     let username = req.body.username;
@@ -61,9 +61,13 @@ const processZipFile = (zipData, fbValueMap) => {
             }
 
             const dataValue = await computeDataValue(inputs, fbValueMap)
+            rimraf('/server/uploads/*', function () {
+                console.log("Cleared folder")
+            });
+
+            resolve({dataValue, advertisers})
             // console.log(dataValue);
             // console.log(advertisers);
-            resolve({dataValue, advertisers})
         })
     })
 }

@@ -98,16 +98,17 @@ Begin PriceData CSS
 
 .sliderHold {
     color: white;
-    padding-left: 13vw;
-    padding-right: 13vw;
+    padding-left: 10vw;
+    padding-right: 10vw;
 }
 
 .sliderHold .sliderCustom {
     color: #007bff;
+    width: 15vw;
 }
 
 .submitButton {
-    margin-top: 3vh;
+    margin-top: 1.5vh;
     background-color: transparent;
     border-color: #ffffff;
     box-shadow: none !important;

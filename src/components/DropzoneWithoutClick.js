@@ -17,6 +17,7 @@ class DropzoneWithoutClick extends React.Component {
                     fileSet: true
                 }
             )
+            this.props.handleFileSet(files[0])
         } else {
             alert("Please upload only a single file")
         }

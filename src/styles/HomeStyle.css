@@ -136,3 +136,24 @@ Begin PriceData CSS
     transform: translateY(-50%);
     display: inline-block;
 }
+
+.logoHold {
+    display: inline-block;
+}
+
+.shareLogo {
+    height: 9vh;
+    width: 9vh;
+    padding-right: 1vw;
+    padding-left: 1vw;
+}
+
+.shareLogo:hover {
+    transform: scale(1.04);
+}
+
+.vertCenter {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}

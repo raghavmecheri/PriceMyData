@@ -52,16 +52,16 @@ const marks = [
 
 const questionTypes = [
     {
-        title: "Your likes and reactions?",
+        title: "Every Facebook like/reaction?",
         key: "likes"
     },{
-        title: "The apps and websites that you sign into?",
+        title: "Every website/app that you signed into?",
         key: "apps"
     },{
-        title: "Your advertiser information?",
+        title: "Every piece advertiser information?",
         key: "ad"
     },{
-        title: "Your location?",
+        title: "Your location at each point in time",
         key: "loc"
     },{
         title: "Your facial data, friends and personal info?",
@@ -99,10 +99,14 @@ export default class PriceData extends Component {
     }
 
     valuetext = (value) => {
-        return `${value}`;
+        return `$${value}`;
     }
 
     submitData = (event) => {
+        // Append FB Entry HERE
+
+        // Begin file evaluation here
+        
         console.log(this.state);
         var payload = new FormData()
         payload.append("username", "raghavmecheri");
@@ -157,8 +161,8 @@ export default class PriceData extends Component {
                             <Typography id="discrete-slider" gutterBottom>
                                 {question.title}
                             </Typography>
-                            <Slider className="sliderCustom" defaultValue={FIXED_DEFAULT} getAriaValueText={this.valuetext} aria-labelledby="discrete-slider" 
-                                valueLabelDisplay="auto" step={0.5} marks min={0} max={10}
+                            <Slider className="sliderCustom" defaultValue={FIXED_DEFAULT} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
+                                valueLabelDisplay="auto" step={1} marks min={0} max={10}
                                 onChange={(event,value)=>{
                                     this.setState(prevState => ({
                                         formValues: {                   

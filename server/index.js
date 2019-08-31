@@ -1,5 +1,6 @@
 import {valueFBData} from "./handlers/ValueFBHandler.js"
 import {processLogin, processSignUp} from "./handlers/UserHandler"
+import MongoHelper from "./MongoHelper"
 
 const express = require('express');
 const path = require('path');
@@ -42,6 +43,19 @@ app.post('/valueFB', upload.single('fbFile'), valueFBData);
 app.get('*', (req, res) => {
  res.sendFile(HTML_FILE);
 });
+
+app.post('/api/appendFBEntry', (req, res) => {
+  let {entry} = req.body;
+  MongoHelper.appendFBEntry(entry);
+  res.json({
+    status: "true"
+  })
+})
+
+app.post('/api/fetchFBValues', async (req, res) => {
+  let valueSet = await MongoHelper.getFBMap();
+  res.json({valueSet});
+})
 
 app.listen(port, function () {
  console.log('App listening on port: ' + port);

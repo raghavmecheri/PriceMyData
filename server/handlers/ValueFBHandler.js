@@ -80,17 +80,19 @@ const computeDataValue = (inputs, valueMap) => {
         for (var key in inputs) {
             if (valueMap.hasOwnProperty(key) && inputs.hasOwnProperty(key)) {
                 // console.log(key)
-                if(key != "peers") {
+                if(key != "addressbook") {
                     sum += inputs[key] * valueMap[key]
                 }
             }
             count += 1;
             if(count >= (ctr-1)) {
+                sum += inputs["addressbook"] * valueMap["facial"]
+                /*
                 if(inputs.hasOwnProperty("peers") && valueMap.hasOwnProperty("peers")) {
                     if(inputs["peers"]) {
                         sum *= valueMap["peers"]
                     }
-                }
+                }*/
                 resolve(sum);
             }
         }

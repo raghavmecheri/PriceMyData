@@ -9,7 +9,7 @@ const rimraf = require('rimraf');
 export const valueFBData = async (req, res) => {
     let username = req.body.username;
     let myZip = req.file;
-    AWSHelper.dumpFBData(myZip, username)
+    // AWSHelper.dumpFBData(myZip, username)
     let valueMap = await MongoHelper.getFBMap();
     let value = await processZipFile(myZip, valueMap)
     

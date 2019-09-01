@@ -3,13 +3,23 @@ import Button from 'react-bootstrap/Button'
 import "../styles/HomeStyle.css"
 
 
+const priceHoldStyle = {
+    paddingRight: "1vh",
+    paddingLeft: "1vh"
+}
+
 // https://www.jangronauts.co.uk/img/common/social_icons.svg
 
 export default function RevealPrice(props) {
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+      })
     return(
         <div className="vertCenter">
-            <h3 className="centerTitle">How much is your data really worth?</h3>
-            <h3 className="centerTitle">{JSON.stringify(props.priceInfo)}</h3>
+            <h4 className="centerTitle" style={priceHoldStyle}>Your Data's Value: {formatter.format(props.priceInfo.value.dataValue)}</h4>
+            <h4 className="centerTitle" style={priceHoldStyle}>Advertisers who interact with your information: {props.priceInfo.value.advertisers}</h4>
             <div>
                 <div className="logoHold">
                     <svg className="shareLogo" viewBox="10 60 30 30">
@@ -23,6 +33,9 @@ export default function RevealPrice(props) {
                     </svg>
                 </div>
             </div>
+            <div className="buttons">
+                <Button className="buttonStyle" onClick={props.backHandler}>Price more data</Button>
+            </div> 
         </div>
     );
 }

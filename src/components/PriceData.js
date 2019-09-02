@@ -50,24 +50,47 @@ const marks = [
     },
 ];
 
-const questionTypes = [
-    {
-        title: "Every Facebook like/reaction?",
-        key: "likes"
-    },{
-        title: "Every website/app that you signed into?",
-        key: "apps"
-    },{
-        title: "Every piece advertiser information?",
-        key: "ad"
-    },{
-        title: "Your location at each point in time",
-        key: "loc"
-    },{
-        title: "Your facial data, friends and personal info?",
-        key: "keyinfo"
-    }
-]
+const questionTypes = {
+    "facebook": [
+        {
+            title: "Every Facebook like/reaction?",
+            key: "f_likes"
+        },{
+            title: "Every website/app that you signed into?",
+            key: "f_apps"
+        },{
+            title: "Every piece of advertiser information?",
+            key: "f_ad"
+        },{
+            title: "Your location at each point in time",
+            key: "f_loc"
+        },{
+            title: "Your facial data, friends and personal info?",
+            key: "f_keyinfo"
+        }
+    ],
+    "google": [
+        {
+            title: "Every piece of your browser data?",
+            key: "g_bdata"
+        },{
+            title: "Every piece of your YouTube data?",
+            //(Likes, subscriptions, etc)
+            key: "g_youtube"
+        },{
+            //(locations visisted, popular places, etc)
+            title: "Every piece of your maps data?",
+            key: "g_ad"
+        },{
+            title: "Your location at any point in time?",
+            key: "g_loc"
+        },{
+            // (Drive, Gmail, Adwords, Analytics)
+            title: "Adwords, Gmail or other such Google data?",
+            key: "g_services"
+        }
+    ]
+}
 
 const FIXED_DEFAULT = 2;
 
@@ -76,7 +99,9 @@ export default class PriceData extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false
+            isLoading: false,
+            toggleValue: 1,
+            formValues: {}
         };
     }
 
@@ -85,17 +110,26 @@ export default class PriceData extends Component {
     }
 
     getDefaultValues = () => {
-        console.log("Getting defaults")
+        console.log("Getting facebook defaults")
         let formValues = {}
         let count = 0;
-        questionTypes.forEach((element) => {
+        console.log(questionTypes['facebook'])
+        questionTypes['facebook'].forEach((element) => {
             count += 1;
             formValues[element.key] = FIXED_DEFAULT;
-            if(count == (questionTypes.length)) {
-                console.log(formValues)
-                this.setState({formValues:formValues})
+            if(count == (questionTypes['facebook'].length)) {
+                console.log("Getting Google defaults")
+                count = 0;
+                questionTypes['google'].forEach((element) => {
+                    count += 1;
+                    formValues[element.key] = FIXED_DEFAULT;
+                    if(count == (questionTypes['google'].length)) {
+                        console.log(formValues)
+                        this.setState({formValues:formValues})
+                    }
+                })
             }
-        })
+        })   
     }
 
     valuetext = (value) => {
@@ -106,12 +140,18 @@ export default class PriceData extends Component {
         // Append FB Entry HERE
 
         // Begin file evaluation here
+        let {toggleValue} = this.state;
+        let fileKey = "fbFile"
+        let endpoint = "./valueFB"
+        if(toggleValue == 2) {
+            endpoint = './valueGoogle';
+            fileKey = "googleFile";
+        }
 
         console.log(this.state);
         var payload = new FormData()
         payload.append("username", "raghavmecheri");
-        payload.append("fbFile", this.state.uploadFile);
-        const endpoint = './valueFB'
+        payload.append(fileKey, this.state.uploadFile);
         this.setState({isLoading:true})
         fetch(endpoint, {
             method: 'POST',
@@ -135,8 +175,22 @@ export default class PriceData extends Component {
         });
     }
 
+    handleToggleChange = (value) => {
+        this.setState({
+            toggleValue: value
+        })
+        console.log(value);
+    }
+
+    verifyValue = (val) => {
+        if(val) {
+            return val;
+        }
+        return FIXED_DEFAULT;
+    }
+
     render() {
-        let {isLoading} = this.state;
+        let {isLoading, toggleValue, formValues} = this.state;
         if(isLoading) {
             return <ReactLoading type={"spin"} color={"#007bff"} className="loadingSign" />
         }
@@ -147,7 +201,7 @@ export default class PriceData extends Component {
             <p className="readMore">Read more about this project <a href="#">here</a></p>
             <p className="readMore">Please upload your Facebook/Google data as a .zip file below</p>
             <ButtonToolbar className="buttonHold">
-                <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+                <ToggleButtonGroup type="radio" name="options" defaultValue={1} onChange={this.handleToggleChange}>
                     <ToggleButton className="toggled" value={1}>Facebook</ToggleButton>
                     <ToggleButton className="toggled" value={2}>Google</ToggleButton>
                 </ToggleButtonGroup>
@@ -156,23 +210,54 @@ export default class PriceData extends Component {
             <h4 className="centerElement">How much would you charge for:</h4>
             <div className="centerElement">
                 {
-                    questionTypes.map((question) => (
-                        <div className="sliderHold">
-                            <Typography id="discrete-slider" gutterBottom>
-                                {question.title}
-                            </Typography>
-                            <Slider className="sliderCustom" defaultValue={FIXED_DEFAULT} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
-                                valueLabelDisplay="auto" step={1} marks min={0} max={10}
-                                onChange={(event,value)=>{
-                                    this.setState(prevState => ({
-                                        formValues: {                   
-                                            ...prevState.formValues,    
-                                            [question.key]: value       
+                    toggleValue == 1 ?
+                        questionTypes.facebook.map((question) => (
+                            <div className="sliderHold">
+                                <Typography id="discrete-slider" gutterBottom>
+                                    {question.title}
+                                </Typography>
+                                {console.log(`Getting value as: ${formValues[question.key]}`)}
+                                <Slider className="sliderCustom" value={this.verifyValue(formValues[question.key])} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
+                                    valueLabelDisplay="auto" step={1} marks min={0} max={10}
+                                    onChange={(event,value)=>{
+                                        console.log(question.key);
+                                        this.setState(prevState => ({
+                                            formValues: {                   
+                                                ...prevState.formValues,    
+                                                [question.key]: value       
+                                            }
+                                        }))
+                                        }} />
+                            </div>
+                        ))
+                    :
+                        questionTypes.google.map((question) => (
+                            <div className="sliderHold">
+                                <Typography id="discrete-slider" gutterBottom>
+                                    {question.title}
+                                </Typography>
+                                <Slider className="sliderCustom" value={this.verifyValue(formValues[question.key])} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
+                                    valueLabelDisplay="auto" step={1} marks min={0} max={10}
+                                    onChange={(event,value)=>{
+                                        if(toggleValue == 1) {
+                                            console.log(question.key);
+                                            this.setState(prevState => ({
+                                                formValues: {                   
+                                                    ...prevState.formValues,    
+                                                    [question.key]: value       
+                                                }
+                                            }))
+                                        } else {
+                                            this.setState(prevState => ({
+                                                formValues: {                   
+                                                    ...prevState.formValues,    
+                                                    [question.key]: value       
+                                                }
+                                            }))
                                         }
-                                    }))
-                                    }} />
-                        </div>
-                    ))
+                                        }} />
+                            </div>
+                        ))
                 }
             <Button className="submitButton" onClick={this.submitData}>Price my data!</Button>
             </div>

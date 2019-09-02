@@ -92,6 +92,11 @@ const questionTypes = {
     ]
 }
 
+const acceptedKeys = [
+    ["f_likes", "f_apps", "f_ad", "f_loc", "f_keyinfo"],
+    ["g_bdata", "g_youtube", "g_ad", "g_loc", "g_services"]
+];
+
 const FIXED_DEFAULT = 2;
 
 export default class PriceData extends Component {
@@ -109,22 +114,38 @@ export default class PriceData extends Component {
         this.getDefaultValues();
     }
 
+    filterForm = (values, keyVal, cb) => {
+        let index = keyVal - 1;
+        let acceptedValues = acceptedKeys[index];
+        let newForm = {}
+        let counter = 0;
+        let total = Object.keys(values).length;
+        Object.keys(values).forEach((key) => {
+            counter += 1;
+            if(acceptedValues.includes(key)) {
+                newForm[key] = values[key];
+            }
+            if(counter >= total) {
+                cb(newForm)
+            }
+        });
+    }
+
     getDefaultValues = () => {
-        console.log("Getting facebook defaults")
+        // console.log("Getting facebook defaults")
         let formValues = {}
         let count = 0;
-        console.log(questionTypes['facebook'])
+        // console.log(questionTypes['facebook'])
         questionTypes['facebook'].forEach((element) => {
             count += 1;
             formValues[element.key] = FIXED_DEFAULT;
             if(count == (questionTypes['facebook'].length)) {
-                console.log("Getting Google defaults")
+                // console.log("Getting Google defaults")
                 count = 0;
                 questionTypes['google'].forEach((element) => {
                     count += 1;
                     formValues[element.key] = FIXED_DEFAULT;
                     if(count == (questionTypes['google'].length)) {
-                        console.log(formValues)
                         this.setState({formValues:formValues})
                     }
                 })
@@ -137,10 +158,17 @@ export default class PriceData extends Component {
     }
 
     submitData = (event) => {
-        // Append FB Entry HERE
 
         // Begin file evaluation here
         let {toggleValue} = this.state;
+
+        let {formValues} = this.state;
+        let sentForm = this.filterForm(formValues, toggleValue, (filteredForm) => {
+            // Append FB Entry HERE
+            console.log(filteredForm);
+        });
+        
+
         let fileKey = "fbFile"
         let endpoint = "./valueFB"
         if(toggleValue == 2) {
@@ -148,7 +176,6 @@ export default class PriceData extends Component {
             fileKey = "googleFile";
         }
 
-        console.log(this.state);
         var payload = new FormData()
         payload.append("username", "raghavmecheri");
         payload.append(fileKey, this.state.uploadFile);
@@ -179,7 +206,7 @@ export default class PriceData extends Component {
         this.setState({
             toggleValue: value
         })
-        console.log(value);
+        // console.log(value);
     }
 
     verifyValue = (val) => {
@@ -216,11 +243,10 @@ export default class PriceData extends Component {
                                 <Typography id="discrete-slider" gutterBottom>
                                     {question.title}
                                 </Typography>
-                                {console.log(`Getting value as: ${formValues[question.key]}`)}
                                 <Slider className="sliderCustom" value={this.verifyValue(formValues[question.key])} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
                                     valueLabelDisplay="auto" step={1} marks min={0} max={10}
                                     onChange={(event,value)=>{
-                                        console.log(question.key);
+                                        // console.log(question.key);
                                         this.setState(prevState => ({
                                             formValues: {                   
                                                 ...prevState.formValues,    
@@ -240,7 +266,7 @@ export default class PriceData extends Component {
                                     valueLabelDisplay="auto" step={1} marks min={0} max={10}
                                     onChange={(event,value)=>{
                                         if(toggleValue == 1) {
-                                            console.log(question.key);
+                                            // console.log(question.key);
                                             this.setState(prevState => ({
                                                 formValues: {                   
                                                     ...prevState.formValues,    

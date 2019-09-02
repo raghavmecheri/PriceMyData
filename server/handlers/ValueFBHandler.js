@@ -50,7 +50,7 @@ const processZipFile = (zipData, fbValueMap) => {
             let hasFacial = await DataReadHandler.hasEntry(facialRecog.facial_data);
             let advertisers = await DataReadHandler.getItemCount(advertiserCount.custom_audiences) + await DataReadHandler.getItemCount(advertiserInteracted.history);
 
-            const inputs = {
+            const totalEntries = {
                 likes,
                 apps,
                 addressbook,
@@ -60,12 +60,12 @@ const processZipFile = (zipData, fbValueMap) => {
                 facial: hasFacial? 1:0
             }
 
-            const dataValue = await computeDataValue(inputs, fbValueMap)
+            const dataValue = await computeDataValue(totalEntries, fbValueMap)
             rimraf('/server/uploads/*', function () {
                 console.log("Cleared folder")
             });
 
-            resolve({dataValue, advertisers})
+            resolve({dataValue, totalEntries})
             // console.log(dataValue);
             // console.log(advertisers);
         })

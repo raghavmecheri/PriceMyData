@@ -19,6 +19,14 @@ const fbMock = {
     // addressbook: 1.3, 
 }
 
+const googleMock = {
+    location: 0.03,
+    browser: 0.22,
+    youtube: 0.12,
+    maps: 0.11,
+    activities: 0.2
+}
+
 const computeDataAverage = (result, callback) => {
     let new_map_sums = {}
     let count = 0
@@ -72,8 +80,13 @@ const appendFBEntry = (fbData) => {
     })
 }
 
+const getGoogleMap = () => {
+    return googleMock;
+}
+
 
 module.exports = {
     getFBMap,
-    appendFBEntry
+    appendFBEntry,
+    getGoogleMap
 }

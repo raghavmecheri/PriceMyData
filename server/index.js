@@ -1,4 +1,5 @@
 import {valueFBData} from "./handlers/ValueFBHandler.js"
+import {valueGoogleData} from "./handlers/ValueGoogleHandler"
 import {processLogin, processSignUp} from "./handlers/UserHandler"
 import MongoHelper from "./MongoHelper"
 
@@ -35,6 +36,8 @@ var localURL = "mongodb://localhost:27017/"
 MongoPool.createPool(localURL, options);
 
 app.post('/valueFB', upload.single('fbFile'), valueFBData);
+
+app.post('/valueGoogle', upload.single('googleFile'), valueGoogleData)
 
 //app.post('/loginUser', processLogin);
 

@@ -1,5 +1,8 @@
 const getItemCount = (jsonData) => {
     return new Promise((resolve, reject) => {
+        if(jsonData.length == null) {
+            resolve(0);
+        }
         resolve(jsonData.length);
     })
 }

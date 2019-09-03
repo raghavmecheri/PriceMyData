@@ -13,43 +13,6 @@ import Slider from '@material-ui/core/Slider';
 import ReactLoading from 'react-loading';
 
 
-const marks = [
-    {
-      value: 0,
-      label: '$0',
-    },{
-        value: 1,
-        label: '$1',
-    },{
-        value: 2,
-        label: '$2',
-    },{
-        value: 3,
-        label: '$3',
-    },{
-        value: 4,
-        label: '$4',
-    },{
-        value: 5,
-        label: '$5',
-    },{
-        value: 6,
-        label: '$6',
-    },{
-        value: 7,
-        label: '$7',
-    },{
-        value: 8,
-        label: '$8',
-    },{
-        value: 9,
-        label: '$9',
-    },{
-        value: 10,
-        label: '$10',
-    },
-];
-
 const questionTypes = {
     "facebook": [
         {
@@ -80,7 +43,7 @@ const questionTypes = {
         },{
             //(locations visisted, popular places, etc)
             title: "Every piece of your maps data?",
-            key: "g_ad"
+            key: "g_map"
         },{
             title: "Your location at any point in time?",
             key: "g_loc"
@@ -97,7 +60,7 @@ const acceptedKeys = [
     ["g_bdata", "g_youtube", "g_ad", "g_loc", "g_services"]
 ];
 
-const FIXED_DEFAULT = 2;
+const FIXED_DEFAULT = 1;
 
 export default class PriceData extends Component {
 
@@ -126,6 +89,7 @@ export default class PriceData extends Component {
                 newForm[key] = values[key];
             }
             if(counter >= total) {
+                newForm["type"] = (keyVal==1?"FB":"GOOGL");
                 cb(newForm)
             }
         });
@@ -165,9 +129,24 @@ export default class PriceData extends Component {
         let {formValues} = this.state;
         let sentForm = this.filterForm(formValues, toggleValue, (filteredForm) => {
             // Append FB Entry HERE
-            console.log(filteredForm);
+            let end = './api/appendEntry'
+            let payload = {
+                entry: filteredForm
+            };
+            fetch(end, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                }).then(res => res.json()).then(response => {
+                    console.log("Transmitted data");
+                    console.log(filteredForm);
+              })
+              .catch(
+                error => console.log(error)
+              );
         });
-        
 
         let fileKey = "fbFile"
         let endpoint = "./valueFB"
@@ -244,7 +223,7 @@ export default class PriceData extends Component {
                                     {question.title}
                                 </Typography>
                                 <Slider className="sliderCustom" value={this.verifyValue(formValues[question.key])} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
-                                    valueLabelDisplay="auto" step={1} marks min={0} max={10}
+                                    valueLabelDisplay="auto" step={0.5} marks min={0} max={5}
                                     onChange={(event,value)=>{
                                         // console.log(question.key);
                                         this.setState(prevState => ({
@@ -263,7 +242,7 @@ export default class PriceData extends Component {
                                     {question.title}
                                 </Typography>
                                 <Slider className="sliderCustom" value={this.verifyValue(formValues[question.key])} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
-                                    valueLabelDisplay="auto" step={1} marks min={0} max={10}
+                                    valueLabelDisplay="auto" step={0.5} marks min={0} max={5}
                                     onChange={(event,value)=>{
                                         if(toggleValue == 1) {
                                             // console.log(question.key);

@@ -76,11 +76,11 @@ const processZipFile = (zipData, fbValueMap) => {
                 activities
             };
 
-            const googleValueMap = MongoHelper.getGoogleMap();
+            const googleValueMap = await MongoHelper.getGoogleMap();
 
             const dataValue = await computeDataValue(totalEntries, googleValueMap)
 
-            console.log(JSON.stringify(totalEntries));
+            console.log(JSON.stringify(dataValue));
 
             rimraf('/server/uploads/*', function () {
                 console.log("Cleared folder")

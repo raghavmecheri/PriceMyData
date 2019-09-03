@@ -47,18 +47,27 @@ app.get('*', (req, res) => {
  res.sendFile(HTML_FILE);
 });
 
-app.post('/api/appendFBEntry', (req, res) => {
+app.post('/api/appendEntry', (req, res) => {
   let {entry} = req.body;
-  MongoHelper.appendFBEntry(entry);
+  MongoHelper.appendPriceEntry(entry);
   res.json({
     status: "true"
   })
 })
 
-app.post('/api/fetchFBValues', async (req, res) => {
+/*
+
+app.post('/api/fetchFBMeans', async (req, res) => {
   let valueSet = await MongoHelper.getFBMap();
   res.json({valueSet});
 })
+
+app.post('/api/fetchGoogleMeans', async (req, res) => {
+  let valueSet = await MongoHelper.getGoogleMap();
+  res.json({valueSet});
+})
+
+*/
 
 app.listen(port, function () {
  console.log('App listening on port: ' + port);

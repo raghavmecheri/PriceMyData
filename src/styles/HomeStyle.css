@@ -80,7 +80,8 @@ Begin PriceData CSS
 }
 
 .buttonHold {
-    margin-bottom: 1.5vh;
+    margin-bottom: 0.5vh;
+    margin-top: 1vh;
     display: inline-block;
 }
 

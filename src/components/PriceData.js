@@ -15,6 +15,8 @@ import ReactLoading from 'react-loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const FB_TUTORIAL = "https://www.pcmag.com/article/360173/how-to-download-your-facebook-data-and-6-surprising-things"
+const GOOG_TUTORIAL = "https://support.google.com/accounts/answer/3024190?hl=en"
 
 const questionTypes = {
     "facebook": [
@@ -76,7 +78,11 @@ export default class PriceData extends Component {
             isLoading: false,
             toggleValue: 1,
             formValues: {},
-            content: "Upload your Facebook data as a .zip file below"
+            content: "Upload your Facebook data as a .zip file below",
+            download: {
+                message: "How do I download my Facebook data?",
+                url: FB_TUTORIAL
+            }
         };
     }
 
@@ -193,9 +199,19 @@ export default class PriceData extends Component {
 
     handleToggleChange = (value) => {
         let change = value==1?"Upload your Facebook data as a .zip file below":"Upload your Google data as a .zip file below"
+
+        let downloadDict = value==1?{
+            message: "How do I download my Facebook data?",
+            url: FB_TUTORIAL
+        }:{
+            message: "How do I download my Google data?",
+            url: GOOG_TUTORIAL
+        }
+
         this.setState({
             toggleValue: value,
-            content: change
+            content: change,
+            download: downloadDict
         })
         // console.log(value);
     }
@@ -216,13 +232,13 @@ export default class PriceData extends Component {
             <React.Fragment>
             <Button className="backButton" onClick={this.props.backHandler}>Exit</Button>
             <h3 style={{marginTop:"-4vh"}}>Let's price your data</h3>
-            <p className="readMore">Read more about this project <a href="#">here</a></p>
             <ButtonToolbar className="buttonHold">
                 <ToggleButtonGroup type="radio" name="options" defaultValue={1} onChange={this.handleToggleChange}>
                     <ToggleButton className="toggled" value={1}>Facebook</ToggleButton>
                     <ToggleButton className="toggled" value={2}>Google</ToggleButton>
                 </ToggleButtonGroup>
             </ButtonToolbar>
+            <p className="readMore"><a href={this.state.download.url}>{this.state.download.message}</a></p>
             <p style={{marginBottom:"2vh", marginTop:"1vh", fontSize:"1.1rem"}}><b>{this.state.content}</b></p>
             <DropzoneWithoutClick handleFileSet={this.setFile}/>
             <h4 className="centerElement">How much would you charge for:</h4>

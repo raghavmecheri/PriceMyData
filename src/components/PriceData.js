@@ -278,10 +278,6 @@ export default class PriceData extends Component {
                 }
             <Button className="submitButton" onClick={this.submitData}>Price my data!</Button>
             </div>
-            <p style={{marginTop:"1.5vh", textAlign:"left", fontSize:"0.6rem", marginLeft:"2vw"}}>By using us to price your data, you agree to our <a href="https://github.com/raghavmecheri/PriceMyDataDocuments/blob/master/TOC.md" target="_blank" style={{
-                color: "#ffffff",
-                textDecoration: "underline"
-            }}>terms and conditions</a></p>
             <ToastContainer />
             </React.Fragment>
         );

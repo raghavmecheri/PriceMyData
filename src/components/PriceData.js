@@ -12,6 +12,9 @@ import Slider from '@material-ui/core/Slider';
 
 import ReactLoading from 'react-loading';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const questionTypes = {
     "facebook": [
@@ -62,6 +65,9 @@ const acceptedKeys = [
 
 const FIXED_DEFAULT = 1;
 
+const MAX_PRICE = 2;
+const PRICE_STEP = 0.1;
+
 export default class PriceData extends Component {
 
     constructor(props) {
@@ -69,7 +75,8 @@ export default class PriceData extends Component {
         this.state = {
             isLoading: false,
             toggleValue: 1,
-            formValues: {}
+            formValues: {},
+            content: "Upload your Facebook data as a .zip file below"
         };
     }
 
@@ -122,57 +129,60 @@ export default class PriceData extends Component {
     }
 
     submitData = (event) => {
+        if(this.state.uploadFile) {
+                // Begin file evaluation here
+            let {toggleValue} = this.state;
 
-        // Begin file evaluation here
-        let {toggleValue} = this.state;
+            let {formValues} = this.state;
+            let sentForm = this.filterForm(formValues, toggleValue, (filteredForm) => {
+                // Append FB Entry HERE
+                let end = './api/appendEntry'
+                let payload = {
+                    entry: filteredForm
+                };
+                fetch(end, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    }).then(res => res.json()).then(response => {
+                        console.log("Transmitted data");
+                        console.log(filteredForm);
+                })
+                .catch(
+                    error => console.log(error)
+                );
+            });
 
-        let {formValues} = this.state;
-        let sentForm = this.filterForm(formValues, toggleValue, (filteredForm) => {
-            // Append FB Entry HERE
-            let end = './api/appendEntry'
-            let payload = {
-                entry: filteredForm
-            };
-            fetch(end, {
+            let fileKey = "fbFile"
+            let endpoint = "./valueFB"
+            if(toggleValue == 2) {
+                endpoint = './valueGoogle';
+                fileKey = "googleFile";
+            }
+
+            var payload = new FormData()
+            payload.append("username", "raghavmecheri");
+            payload.append(fileKey, this.state.uploadFile);
+            this.setState({isLoading:true})
+            fetch(endpoint, {
                 method: 'POST',
-                body: JSON.stringify(payload),
-                headers:{
+                body: payload,
+                /*headers:{
                     'Content-Type': 'application/json'
-                },
+                },*/
                 }).then(res => res.json()).then(response => {
-                    console.log("Transmitted data");
-                    console.log(filteredForm);
-              })
-              .catch(
+                    this.setState({isLoading:false})
+                    this.props.handlePrice(response);
+                    //alert(JSON.stringify(response))
+            })
+            .catch(
                 error => console.log(error)
-              );
-        });
-
-        let fileKey = "fbFile"
-        let endpoint = "./valueFB"
-        if(toggleValue == 2) {
-            endpoint = './valueGoogle';
-            fileKey = "googleFile";
+            );
+        } else {
+            toast.error("Please upload a .zip file");
         }
-
-        var payload = new FormData()
-        payload.append("username", "raghavmecheri");
-        payload.append(fileKey, this.state.uploadFile);
-        this.setState({isLoading:true})
-        fetch(endpoint, {
-            method: 'POST',
-            body: payload,
-            /*headers:{
-                'Content-Type': 'application/json'
-            },*/
-            }).then(res => res.json()).then(response => {
-                this.setState({isLoading:false})
-                this.props.handlePrice(response);
-                //alert(JSON.stringify(response))
-          })
-          .catch(
-            error => console.log(error)
-          );
     }
 
     setFile = (file) => {
@@ -182,8 +192,10 @@ export default class PriceData extends Component {
     }
 
     handleToggleChange = (value) => {
+        let change = value==1?"Upload your Facebook data as a .zip file below":"Upload your Google data as a .zip file below"
         this.setState({
-            toggleValue: value
+            toggleValue: value,
+            content: change
         })
         // console.log(value);
     }
@@ -205,13 +217,13 @@ export default class PriceData extends Component {
             <Button className="backButton" onClick={this.props.backHandler}>Exit</Button>
             <h3 style={{marginTop:"-4vh"}}>Let's price your data</h3>
             <p className="readMore">Read more about this project <a href="#">here</a></p>
-            <p className="readMore">Please upload your Facebook/Google data as a .zip file below</p>
             <ButtonToolbar className="buttonHold">
                 <ToggleButtonGroup type="radio" name="options" defaultValue={1} onChange={this.handleToggleChange}>
                     <ToggleButton className="toggled" value={1}>Facebook</ToggleButton>
                     <ToggleButton className="toggled" value={2}>Google</ToggleButton>
                 </ToggleButtonGroup>
             </ButtonToolbar>
+            <p style={{marginBottom:"2vh", marginTop:"1vh", fontSize:"1.1rem"}}><b>{this.state.content}</b></p>
             <DropzoneWithoutClick handleFileSet={this.setFile}/>
             <h4 className="centerElement">How much would you charge for:</h4>
             <div className="centerElement">
@@ -223,7 +235,7 @@ export default class PriceData extends Component {
                                     {question.title}
                                 </Typography>
                                 <Slider className="sliderCustom" value={this.verifyValue(formValues[question.key])} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
-                                    valueLabelDisplay="auto" step={0.5} marks min={0} max={5}
+                                    valueLabelDisplay="auto" step={PRICE_STEP} marks min={0} max={MAX_PRICE}
                                     onChange={(event,value)=>{
                                         // console.log(question.key);
                                         this.setState(prevState => ({
@@ -242,7 +254,7 @@ export default class PriceData extends Component {
                                     {question.title}
                                 </Typography>
                                 <Slider className="sliderCustom" value={this.verifyValue(formValues[question.key])} valueLabelFormat={this.valuetext} aria-labelledby="discrete-slider" 
-                                    valueLabelDisplay="auto" step={0.5} marks min={0} max={5}
+                                    valueLabelDisplay="auto" step={PRICE_STEP} marks min={0} max={MAX_PRICE}
                                     onChange={(event,value)=>{
                                         if(toggleValue == 1) {
                                             // console.log(question.key);
@@ -270,6 +282,7 @@ export default class PriceData extends Component {
                 color: "#ffffff",
                 textDecoration: "underline"
             }}>terms and conditions</a></p>
+            <ToastContainer />
             </React.Fragment>
         );
     }

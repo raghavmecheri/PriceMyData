@@ -157,3 +157,14 @@ Begin PriceData CSS
     top: 50%;
     transform: translateY(-50%);
 }
+
+
+.middleButtonStyle {
+    margin-top: 3vh;
+    background-color: transparent;
+    border-color: #ffffff;
+}
+
+.middleButtonStyle:hover {
+    transform: scale(1.025); 
+}

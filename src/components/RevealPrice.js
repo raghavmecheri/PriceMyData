@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
 import "../styles/HomeStyle.css"
 
+const CHANGE_URL = "https://binit.in";
 
 const priceHoldStyle = {
     paddingRight: "1vh",
@@ -34,7 +35,8 @@ export default function RevealPrice(props) {
                 </div>
             </div>
             <div className="buttons">
-                <Button className="buttonStyle" onClick={props.backHandler}>Price more data</Button>
+                <Button className="middleButtonStyle" style={{marginRight:"1vh"}} onClick={() => window.open(CHANGE_URL, '_blank')}>Where's my money?</Button>
+                <Button className="middleButtonStyle" style={{marginLeft:"1vh"}} onClick={props.backHandler}>Price more data</Button>
             </div> 
         </div>
     );

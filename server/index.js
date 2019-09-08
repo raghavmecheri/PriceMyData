@@ -34,13 +34,14 @@ app.use(bodyParser.json({ extended: true, limit: '50mb' }));
 var options = { numberOfRetries : 5, auto_reconnect: true, poolSize : 40, connectTimeoutMS: 500 };
 
 let mongo = "mongodb://localhost:27017/"
-
+let remoteMongo = "mongodb+srv://user:NGp1EEq84uBkMsfm@cluster0-fvcqb.mongodb.net/test?retryWrites=true&w=majority"
+/*
 if(process.env.MONGO) {
   console.log("Found env variable!")
   mongo = process.env.MONGO
 }
-
-MongoPool.createPool(mongo, options);
+*/
+MongoPool.createPool(remoteMongo, options);
 
 app.post('/valueFB', upload.single('fbFile'), valueFBData);
 

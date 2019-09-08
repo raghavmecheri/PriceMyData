@@ -10,6 +10,13 @@ Then, navigate to the root folder of the project and run:
 ```bash
 npm install --save
 ```
+
+This project requies an .env file at the root level to run. The default env configuration for local development is as follows:
+```
+NODE_ENV=development
+PORT=3000
+MONGO=mongodb://localhost:27017/
+```
 To run the project locally:
 
 ```bash

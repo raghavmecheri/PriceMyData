@@ -24,7 +24,6 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage, limits: { fileSize: '50mb' }})
 
 const app = express();
-const port = process.env.PORT || 3000;
 const DIST_DIR = path.join(__dirname, '../dist');
 const HTML_FILE = path.join(DIST_DIR, 'index.html');
 app.use(express.static(DIST_DIR));
@@ -35,7 +34,8 @@ app.use(bodyParser.json({ extended: true, limit: '50mb' }));
 
 var options = { numberOfRetries : 5, auto_reconnect: true, poolSize : 40, connectTimeoutMS: 500 };
 
-let mongo = process.env.MONGO
+let mongo = process.env.MONGO;
+let PORT = process.env.PORT || 3000;;
 
 MongoPool.createPool(mongo, options);
 
@@ -73,6 +73,6 @@ app.post('/api/fetchGoogleMeans', async (req, res) => {
 
 */
 
-app.listen(port, function () {
- console.log('App listening on port: ' + port);
+app.listen(PORT, function () {
+ console.log('App listening on port: ' + PORT);
 });

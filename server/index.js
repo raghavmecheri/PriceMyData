@@ -41,7 +41,7 @@ if(process.env.MONGO) {
   mongo = process.env.MONGO
 }
 */
-MongoPool.createPool(remoteMongo, options);
+MongoPool.createPool(mongo, options);
 
 app.post('/valueFB', upload.single('fbFile'), valueFBData);
 

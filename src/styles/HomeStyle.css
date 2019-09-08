@@ -149,7 +149,7 @@ Begin PriceData CSS
 }
 
 .shareLogo:hover {
-    transform: scale(1.04);
+    transform: scale(1.1);
 }
 
 .vertCenter {
@@ -168,3 +168,5 @@ Begin PriceData CSS
 .middleButtonStyle:hover {
     transform: scale(1.025); 
 }
+
+.removeOutline:focus {outline:0 !important;}

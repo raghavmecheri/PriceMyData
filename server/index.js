@@ -33,7 +33,8 @@ app.use(bodyParser.json({ extended: true, limit: '50mb' }));
 
 var options = { numberOfRetries : 5, auto_reconnect: true, poolSize : 40, connectTimeoutMS: 500 };
 var localURL = "mongodb://localhost:27017/"
-MongoPool.createPool(localURL, options);
+var remoteURL = "mongodb+srv://user:NGp1EEq84uBkMsfm@cluster0-fvcqb.mongodb.net/test?retryWrites=true&w=majority"
+MongoPool.createPool(remoteURL, options);
 
 app.post('/valueFB', upload.single('fbFile'), valueFBData);
 

@@ -9,6 +9,8 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const MongoPool = require('mongopooler');
 const multer = require('multer');
+const dotenv = require('dotenv');
+dotenv.config();
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -33,14 +35,8 @@ app.use(bodyParser.json({ extended: true, limit: '50mb' }));
 
 var options = { numberOfRetries : 5, auto_reconnect: true, poolSize : 40, connectTimeoutMS: 500 };
 
-let mongo = "mongodb://localhost:27017/"
-let remoteMongo = "mongodb+srv://user:NGp1EEq84uBkMsfm@cluster0-fvcqb.mongodb.net/test?retryWrites=true&w=majority"
-/*
-if(process.env.MONGO) {
-  console.log("Found env variable!")
-  mongo = process.env.MONGO
-}
-*/
+let mongo = process.env.MONGO
+
 MongoPool.createPool(mongo, options);
 
 app.post('/valueFB', upload.single('fbFile'), valueFBData);

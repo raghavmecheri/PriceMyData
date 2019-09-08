@@ -31,18 +31,18 @@ export default class App extends Component {
         });
     }
 
-    priceFound = (response) => {
-        this.setState({priceData:response})
+    priceFound = (response, platform) => {
+        this.setState({priceData:response, platform: platform})
     }
 
     render() {
-        let {priceData, priceMe} = this.state;
+        let {priceData, priceMe, platform} = this.state;
         return (
             <div className="containerDiv">
                 {
                     priceData.hasElements() ? (
                         <div className="center" style={{paddingTop:"3vh"}}>
-                        <RevealPrice backHandler={this.backClicked} priceInfo={priceData}/>
+                        <RevealPrice backHandler={this.backClicked} priceInfo={priceData} platformName={platform}/>
                         </div>
                     ):
                         priceMe ? (

@@ -180,7 +180,8 @@ export default class PriceData extends Component {
                 },*/
                 }).then(res => res.json()).then(response => {
                     this.setState({isLoading:false})
-                    this.props.handlePrice(response);
+                    let platform = (toggleValue == 1? "Facebook":"Google");
+                    this.props.handlePrice(response, platform);
                     //alert(JSON.stringify(response))
             })
             .catch(

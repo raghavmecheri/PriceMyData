@@ -34,15 +34,12 @@
     border-color: #ffffff;
 }
 
-.circularButton {
+.counter {
     position: absolute;
     top:1vh;
     left:1vw;
-    height:5vh;
-    width:5vh;
-    border-radius: 50%;
     background-color: transparent;
-    border-color: #ffffff;
+    color: #ffffff;
 }
 
 .readMore {

@@ -41,7 +41,7 @@ MongoPool.createPool(mongo, options);
 
 app.post('/valueFB', upload.single('fbFile'), valueFBData);
 
-app.post('/valueGoogle', upload.single('googleFile'), valueGoogleData)
+app.post('/valueGoogle', upload.single('googleFile'), valueGoogleData);
 
 //app.post('/loginUser', processLogin);
 
@@ -56,6 +56,13 @@ app.post('/api/appendEntry', (req, res) => {
   MongoHelper.appendPriceEntry(entry);
   res.json({
     status: "true"
+  })
+})
+
+app.post('/fetchUserCount', async (req, res) => {
+  let userCount = await MongoHelper.getUserCount();
+  res.json({
+    count: userCount
   })
 })
 

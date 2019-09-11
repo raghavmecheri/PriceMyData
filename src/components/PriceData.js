@@ -239,7 +239,7 @@ export default class PriceData extends Component {
                     <ToggleButton className="toggled" value={2}>Google</ToggleButton>
                 </ToggleButtonGroup>
             </ButtonToolbar>
-            <p className="readMore"><a href={this.state.download.url}>{this.state.download.message}</a></p>
+            <p className="readMore"><a href={this.state.download.url} target="_blank">{this.state.download.message}</a></p>
             <p style={{marginBottom:"2vh", marginTop:"1vh", fontSize:"1.1rem"}}><b>{this.state.content}</b></p>
             <DropzoneWithoutClick handleFileSet={this.setFile}/>
             <h4 className="centerElement">How much would you charge for:</h4>

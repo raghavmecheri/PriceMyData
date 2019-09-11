@@ -98,10 +98,24 @@ const getFBMap = () => {
     })
 }
 
+const getUserCount = () => {
+    return new Promise((resolve, reject) => {
+        MongoPool.getInstance((client) => {
+            let db = client.db("pricemydata")
+            let collectionName = "price_entries"
+            db.collection(collectionName).count({}, function(error, numOfDocs){
+                if(error) return callback(error);
+                resolve(numOfDocs);
+            });
+        })
+    })
+}
+
 module.exports = {
     appendPriceEntry,
     getFBMap,
-    getGoogleMap
+    getGoogleMap,
+    getUserCount
 }
 
 

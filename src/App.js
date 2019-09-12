@@ -55,7 +55,7 @@ export default class App extends Component {
                         </div>
                     ):
                         priceMe ? (
-                            <div className="center" style={{paddingTop:"3vh"}}>
+                            <div className="center" style={{paddingTop:"8vh"}}>
                             <PriceData backHandler={this.backClicked} handlePrice={this.priceFound}/>
                             </div>
                         ) : (

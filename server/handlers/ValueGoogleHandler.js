@@ -7,19 +7,26 @@ const StreamZip = require('node-stream-zip');
 const rimraf = require('rimraf');
 
 export const valueGoogleData = async (req, res) => {
-    console.log("Evaluating Google Data...")
-    let username = req.body.username;
-    let myZip = req.file;
-    // AWSHelper.dumpFBData(myZip, username)
-    let valueMap = await MongoHelper.getGoogleMap();
-    let value = await processZipFile(myZip, valueMap)
-    
-    FileRemovalHandler.removeDirectory(myZip.path);
+    try {
+        // console.log("Evaluating Google Data...")
+        let username = req.body.username;
+        let myZip = req.file;
+        // AWSHelper.dumpFBData(myZip, username)
+        let valueMap = await MongoHelper.getGoogleMap();
+        let value = await processZipFile(myZip, valueMap)
+        
+        FileRemovalHandler.removeDirectory(myZip.path);
 
-    res.json({
-        "status":"true",
-        "value":value
-    })
+        res.json({
+            "status":"true",
+            "value":value
+        })
+    } catch (e) {
+        res.json({
+            "status":"false",
+            "value":{}
+        })
+    }
 }
 
 const processZipFile = (zipData, fbValueMap) => {

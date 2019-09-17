@@ -65,7 +65,7 @@ const acceptedKeys = [
     ["g_bdata", "g_youtube", "g_ad", "g_loc", "g_services"]
 ];
 
-const FIXED_DEFAULT = 1;
+const FIXED_DEFAULT = 0.5;
 
 const MAX_PRICE = 2;
 const PRICE_STEP = 0.1;
@@ -179,9 +179,14 @@ export default class PriceData extends Component {
                     'Content-Type': 'application/json'
                 },*/
                 }).then(res => res.json()).then(response => {
-                    this.setState({isLoading:false})
-                    let platform = (toggleValue == 1? "Facebook":"Google");
-                    this.props.handlePrice(response, platform);
+                    if(response.status) {
+                        this.setState({isLoading:false})
+                        let platform = (toggleValue == 1? "Facebook":"Google");
+                        this.props.handlePrice(response, platform);
+                    } else {
+                        this.setState({isLoading:false})
+                        console.log("Handle bad submission here");
+                    }
                     //alert(JSON.stringify(response))
             })
             .catch(

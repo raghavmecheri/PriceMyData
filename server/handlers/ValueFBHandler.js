@@ -6,6 +6,7 @@ import DataReadHandler from "./DataReadHandler"
 const StreamZip = require('node-stream-zip');
 const rimraf = require('rimraf');
 
+
 export const valueFBData = async (req, res) => {
     let username = req.body.username;
     let myZip = req.file;
@@ -15,9 +16,16 @@ export const valueFBData = async (req, res) => {
     
     FileRemovalHandler.removeDirectory(myZip.path);
 
+    if(value) {
+        res.json({
+            "status":"true",
+            "value":value
+        })
+    }
+
     res.json({
-        "status":"true",
-        "value":value
+        "status":"false",
+        "value":{}
     })
 }
 
@@ -39,13 +47,13 @@ const processZipFile = (zipData, fbValueMap) => {
             const advertiserCount = JSON.parse(zip.entryDataSync("ads/advertisers_who_uploaded_a_contact_list_with_your_information.json"))
             const advertiserInteracted = JSON.parse(zip.entryDataSync("ads/advertisers_you've_interacted_with.json"))
             const locationHistory = JSON.parse(zip.entryDataSync("location/location_history.json"))
-
+            
             let likes = await DataReadHandler.getItemCount(postComment.reactions) + await DataReadHandler.getItemCount(pages.page_likes);
             let apps = await DataReadHandler.getItemCount(appsWebsites.installed_apps);
             let addressbook = await DataReadHandler.getItemCount(addressBook.address_book.address_book);
             let interests = await DataReadHandler.getItemCount(interestList.topics);
             let location = await DataReadHandler.getItemCount(locationHistory.location_history);
-
+            
             let hasPeerGroup = await DataReadHandler.hasEntry(peerGroup.friend_peer_group);
             let hasFacial = await DataReadHandler.hasEntry(facialRecog.facial_data);
             let advertisers = await DataReadHandler.getItemCount(advertiserCount.custom_audiences) + await DataReadHandler.getItemCount(advertiserInteracted.history);

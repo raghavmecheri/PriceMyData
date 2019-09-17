@@ -19,6 +19,7 @@ const priceHoldStyle = {
 // https://www.jangronauts.co.uk/img/common/social_icons.svg
 
 export default function RevealPrice(props) {
+    console.log(props);
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',

@@ -33,7 +33,7 @@ export const valueFBData = async (req, res) => {
     let myZip = req.file;
     // AWSHelper.dumpFBData(myZip, username)
     let valueMap = await MongoHelper.getFBMap();
-    let value = await DataReadHandler.processZipFile(myZip, valueMap, fileStructure, entryMap);
+    let value = await DataReadHandler.processZipFile(myZip, valueMap, fileStructure, entryMap, false);
     
     if(value) {
         res.json({

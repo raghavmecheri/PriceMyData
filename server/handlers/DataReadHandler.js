@@ -1,7 +1,7 @@
 const StreamZip = require('node-stream-zip');
 const rimraf = require('rimraf');
 
-const processZipFile = (zipData, fbValueMap, fileStructure, entryMap) => {
+const processZipFile = (zipData, valueMap, fileStructure, entryMap, isGoogle) => {
     return new Promise((resolve, reject) => {
         const zip = new StreamZip({
             file: zipData.path,
@@ -27,7 +27,12 @@ const processZipFile = (zipData, fbValueMap, fileStructure, entryMap) => {
             }
             fileData = await fillMissingFields(fileData, fileStructure);
             countAllEntires(fileData, entryMap).then(async (totalEntries) => {
-                const dataValue = await computeDataValue(totalEntries, fbValueMap)
+                let dataValue = 0;
+                if(isGoogle) {
+                    dataValue = await computeGoogleValue(totalEntries, valueMap);
+                } else {
+                    dataValue = await computeFacebookValue(totalEntries, valueMap);
+                }
                 rimraf('/server/uploads/*', function () {
                     console.log("Cleared folder")
                 });
@@ -43,7 +48,7 @@ const processZipFile = (zipData, fbValueMap, fileStructure, entryMap) => {
     })
 }
 
-const computeDataValue = (inputs, valueMap) => {
+const computeFacebookValue = (inputs, valueMap) => {
     return new Promise((resolve, reject) => {
         let sum = 0;
         let ctr = Object.keys(inputs).length
@@ -66,6 +71,23 @@ const computeDataValue = (inputs, valueMap) => {
                 }*/
                 resolve(sum);
             }
+        }
+    })
+}
+
+const computeGoogleValue = (inputs, valueMap) => {
+    return new Promise((resolve, reject) => {
+        let sum = 0;
+        let ctr = Object.keys(inputs).length
+        let count = 0;
+        for (var key in inputs) {
+            if (valueMap.hasOwnProperty(key) && inputs.hasOwnProperty(key)) {
+                sum += inputs[key] * valueMap[key]
+            }
+            count += 1;
+            if(count >= (ctr-1)) {
+                resolve(sum);
+            } 
         }
     })
 }
@@ -149,10 +171,5 @@ const countAllEntires = (inputVector, entryMap) => {
 }
 
 module.exports = {
-    getItemCount,
-    hasEntry,
-    fillMissingFields,
-    getNestedValue,
-    countAllEntires,
     processZipFile
 }

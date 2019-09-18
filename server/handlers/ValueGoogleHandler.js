@@ -3,6 +3,19 @@ import FileRemovalHandler from "./FileRemovalHandler"
 import MongoHelper from "../MongoHelper"
 import DataReadHandler from "./DataReadHandler"
 
+
+/*
+    const fileStructure = {
+    "Takeout/Location History/Location History.json": "locationHistory",
+    "Takeout/Chrome/BrowserHistory.json":"browserHistory",
+    "Takeout/Chrome/SearchEngines.json": "searchEngines",
+    "Takeout/Chrome/Extensions.json":"extensions",
+    "Takeout/YouTube/playlists/likes.json":"youtubeLikes",
+    "Takeout/YouTube/subscriptions/subscriptions.json":"youtubeSubs",
+    "Takeout/Maps/Added dishes, products, activities/Added dishes, products, activities.json":"dishesProdAct",
+    "Takeout/Maps/My labeled places/Labeled places.json":"labledPlaces"
+}
+*/
 const StreamZip = require('node-stream-zip');
 const rimraf = require('rimraf');
 
@@ -21,7 +34,7 @@ export const valueGoogleData = async (req, res) => {
             "status":"true",
             "value":value
         })
-    } catch (e) {
+    } catch (e){
         res.json({
             "status":"false",
             "value":{}

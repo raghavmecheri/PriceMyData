@@ -3,8 +3,29 @@ import FileRemovalHandler from "./FileRemovalHandler"
 import MongoHelper from "../MongoHelper"
 import DataReadHandler from "./DataReadHandler"
 
-const StreamZip = require('node-stream-zip');
-const rimraf = require('rimraf');
+const fileStructure = {
+    "likes_and_reactions/posts_and_comments.json": "postComment",
+    "likes_and_reactions/pages.json": "pages",
+    "apps_and_websites/apps_and_websites.json":"appsWebsites",
+    "about_you/friend_peer_group.json":"peerGroup",
+    "about_you/face_recognition.json": "facialRecog",
+    "about_you/your_address_books.json": "addressBook",
+    "ads/ads_interests.json": "interestList",
+    "ads/advertisers_who_uploaded_a_contact_list_with_your_information.json": "advertiserCount",
+    "ads/advertisers_you've_interacted_with.json": "advertiserInteracted",
+    "location/location_history.json": "locationHistory"
+}
+
+const entryMap = {
+    likes: ["postComment.reactions","pages.page_likes"],
+    apps: ["appsWebsites.installed_apps"],
+    addressBook: ["addressBook.address_book.address_book"],
+    interests: ["interestList.topics"],
+    location: ["locationHistory.location_history"],
+    hasPeerGroup: ["peerGroup.friend_peer_group"],
+    hasFacial: ["facialRecog.facial_data"],
+    advertisers: ["advertiserCount.custom_audiences", "advertiserInteracted.history"]
+}
 
 
 export const valueFBData = async (req, res) => {
@@ -12,10 +33,8 @@ export const valueFBData = async (req, res) => {
     let myZip = req.file;
     // AWSHelper.dumpFBData(myZip, username)
     let valueMap = await MongoHelper.getFBMap();
-    let value = await processZipFile(myZip, valueMap)
+    let value = await DataReadHandler.processZipFile(myZip, valueMap, fileStructure, entryMap);
     
-    FileRemovalHandler.removeDirectory(myZip.path);
-
     if(value) {
         res.json({
             "status":"true",
@@ -26,83 +45,5 @@ export const valueFBData = async (req, res) => {
     res.json({
         "status":"false",
         "value":{}
-    })
-}
-
-const processZipFile = (zipData, fbValueMap) => {
-    return new Promise((resolve, reject) => {
-        const zip = new StreamZip({
-            file: zipData.path,
-            storeEntries: true
-        });
-        zip.on('ready', async () => {
-
-            const postComment = JSON.parse(zip.entryDataSync("likes_and_reactions/posts_and_comments.json"))
-            const pages = JSON.parse(zip.entryDataSync("likes_and_reactions/pages.json"))
-            const appsWebsites = JSON.parse(zip.entryDataSync("apps_and_websites/apps_and_websites.json"))
-            const peerGroup = JSON.parse(zip.entryDataSync("about_you/friend_peer_group.json"))
-            const facialRecog = JSON.parse(zip.entryDataSync("about_you/face_recognition.json"))
-            const addressBook = JSON.parse(zip.entryDataSync("about_you/your_address_books.json"))
-            const interestList = JSON.parse(zip.entryDataSync("ads/ads_interests.json"))
-            const advertiserCount = JSON.parse(zip.entryDataSync("ads/advertisers_who_uploaded_a_contact_list_with_your_information.json"))
-            const advertiserInteracted = JSON.parse(zip.entryDataSync("ads/advertisers_you've_interacted_with.json"))
-            const locationHistory = JSON.parse(zip.entryDataSync("location/location_history.json"))
-            
-            let likes = await DataReadHandler.getItemCount(postComment.reactions) + await DataReadHandler.getItemCount(pages.page_likes);
-            let apps = await DataReadHandler.getItemCount(appsWebsites.installed_apps);
-            let addressbook = await DataReadHandler.getItemCount(addressBook.address_book.address_book);
-            let interests = await DataReadHandler.getItemCount(interestList.topics);
-            let location = await DataReadHandler.getItemCount(locationHistory.location_history);
-            
-            let hasPeerGroup = await DataReadHandler.hasEntry(peerGroup.friend_peer_group);
-            let hasFacial = await DataReadHandler.hasEntry(facialRecog.facial_data);
-            let advertisers = await DataReadHandler.getItemCount(advertiserCount.custom_audiences) + await DataReadHandler.getItemCount(advertiserInteracted.history);
-
-            const totalEntries = {
-                likes,
-                apps,
-                addressbook,
-                interests,
-                location,
-                peers: hasPeerGroup? 1:0,
-                facial: hasFacial? 1:0
-            }
-
-            const dataValue = await computeDataValue(totalEntries, fbValueMap)
-            rimraf('/server/uploads/*', function () {
-                console.log("Cleared folder")
-            });
-
-            resolve({dataValue, totalEntries})
-            // console.log(dataValue);
-            // console.log(advertisers);
-        })
-    })
-}
-
-const computeDataValue = (inputs, valueMap) => {
-    return new Promise((resolve, reject) => {
-        let sum = 0;
-        let ctr = Object.keys(inputs).length
-        let count = 0;
-        for (var key in inputs) {
-            if (valueMap.hasOwnProperty(key) && inputs.hasOwnProperty(key)) {
-                // console.log(key)
-                if(key != "addressbook") {
-                    sum += inputs[key] * valueMap[key]
-                }
-            }
-            count += 1;
-            if(count >= (ctr-1)) {
-                sum += inputs["addressbook"] * valueMap["facial"]
-                /*
-                if(inputs.hasOwnProperty("peers") && valueMap.hasOwnProperty("peers")) {
-                    if(inputs["peers"]) {
-                        sum *= valueMap["peers"]
-                    }
-                }*/
-                resolve(sum);
-            }
-        }
     })
 }

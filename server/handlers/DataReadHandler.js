@@ -1,6 +1,9 @@
 const StreamZip = require('node-stream-zip');
 const rimraf = require('rimraf');
 
+const GOOGLE_ACTIVITES_REGEX = new RegExp(/My Activity\//);
+const GOOGLE_FILE_REGEX = new RegExp(/json/)
+
 const processZipFile = (zipData, valueMap, fileStructure, entryMap, isGoogle) => {
     return new Promise((resolve, reject) => {
         const zip = new StreamZip({
@@ -8,27 +11,41 @@ const processZipFile = (zipData, valueMap, fileStructure, entryMap, isGoogle) =>
             storeEntries: true
         });
         zip.on('error', err => {
-            console.log("ERROR");
+            // console.log("ERROR");
             console.log(err);
         });
         zip.on('ready', async () => {
             let fileData = {}
+            let activitesCount = 0;
             for (const entry of Object.values(zip.entries())) {
                 if(!entry.isDirectory) {
                     let fileName = entry.name;
+                    if(isGoogle) {
+                        if(GOOGLE_ACTIVITES_REGEX.test(fileName) && GOOGLE_FILE_REGEX.test(fileName)) {
+                            try {
+                                data = JSON.parse(zip.entryDataSync(fileName));
+                                activitesCount += await getItemCount(data);
+                            } catch (e) {
+                                console.log("Failed to process activity data!")
+                            }
+                        }
+                    }
                     let data;
                     try {
                         data = JSON.parse(zip.entryDataSync(fileName));
                     } catch (e) {
                         data = {};
                     }
-                    fileData[fileStructure[fileName]] = data;
+                    if(fileStructure[fileName]) {
+                        fileData[fileStructure[fileName]] = data;
+                    }   
                 }
             }
             fileData = await fillMissingFields(fileData, fileStructure);
             countAllEntires(fileData, entryMap).then(async (totalEntries) => {
                 let dataValue = 0;
                 if(isGoogle) {
+                    totalEntries["activities"] = activitesCount;
                     dataValue = await computeGoogleValue(totalEntries, valueMap);
                 } else {
                     dataValue = await computeFacebookValue(totalEntries, valueMap);
@@ -77,6 +94,7 @@ const computeFacebookValue = (inputs, valueMap) => {
 
 const computeGoogleValue = (inputs, valueMap) => {
     return new Promise((resolve, reject) => {
+        console.log(valueMap);
         let sum = 0;
         let ctr = Object.keys(inputs).length
         let count = 0;
@@ -85,7 +103,7 @@ const computeGoogleValue = (inputs, valueMap) => {
                 sum += inputs[key] * valueMap[key]
             }
             count += 1;
-            if(count >= (ctr-1)) {
+            if(count >= (ctr)) {
                 resolve(sum);
             } 
         }

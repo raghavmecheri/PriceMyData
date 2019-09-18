@@ -22,9 +22,6 @@ const entryMap = {
     maps: ["dishesProdAct","labledPlacesfeatures"]
 }
 
-const actvitesPath = "My Activity/"
-const activityExt = "MyActivity.json"
-
 
 export const valueGoogleData = async (req, res) => {
     let username = req.body.username;

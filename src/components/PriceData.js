@@ -153,8 +153,8 @@ export default class PriceData extends Component {
                         'Content-Type': 'application/json'
                     },
                     }).then(res => res.json()).then(response => {
-                        console.log("Transmitted data");
-                        console.log(filteredForm);
+                        // console.log("Response data");
+                        // console.log(response);
                 })
                 .catch(
                     error => console.log(error)

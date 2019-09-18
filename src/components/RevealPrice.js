@@ -25,10 +25,25 @@ export default function RevealPrice(props) {
         currency: 'USD',
         minimumFractionDigits: 2
       })
+    let advertisers = props.priceInfo.value.totalEntries.advertisers;
+
     return(
         <div className="vertCenter">
             <h4 className="centerTitle" style={priceHoldStyle}>Your Data's Value: {formatter.format(props.priceInfo.value.dataValue)}</h4>
-            <h4 className="centerTitle" style={priceHoldStyle}>Advertisers who interact with your information: {props.priceInfo.value.advertisers}</h4>
+            {
+                advertisers ? (
+                    <React.Fragment>
+                    <h4 className="centerTitle" style={priceHoldStyle}>Advertisers who interact with your information: {advertisers}</h4>
+                    <h4 className="centerTitle" style={priceHoldStyle}>If you took 10% on each advertiser sale: {formatter.format(props.priceInfo.value.dataValue*advertisers * 0.10)}</h4>
+                    </React.Fragment>
+                ):(
+                    <React.Fragment>
+                    <h4 className="centerTitle" style={priceHoldStyle}>We don't know how many advertisers interact with Google information :(</h4>
+                    <h4 className="centerTitle" style={priceHoldStyle}>If you took 10% on each advertiser sale, you would make: {formatter.format(props.priceInfo.value.dataValue*0.10)} per advertiser</h4>
+                    </React.Fragment>
+                )
+            }
+            
             <div>
                 <div className="logoHold">
                 <FacebookShareButton className="removeOutline" style={{"float":"left"}} url="https://pricemydata.com" quote={`PriceMyData says that my ${props.platformName} data is worth ${formatter.format(props.priceInfo.value.dataValue)}! Check out how much your data is worth at PriceMyData`} hashtag="#dataHasValue">

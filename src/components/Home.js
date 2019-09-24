@@ -3,6 +3,9 @@ import Button from 'react-bootstrap/Button'
 import CountUp from 'react-countup';
 import "../styles/HomeStyle.css"
 
+const pmdTOC = "https://github.com/raghavmecheri/PriceMyData/blob/master/Documentation/TOC.md";
+const pmdGit = "https://github.com/raghavmecheri/PriceMyData";
+
 export default class Home extends Component {
 
     constructor(props) {
@@ -38,8 +41,9 @@ export default class Home extends Component {
                 <div className="buttons">
                     <Button className="buttonStyle" onClick={this.props.priceHandler}>Price my data</Button>
                 </div>
-                <p className="readMore">Read more about this project <a href="#">here</a></p>
-                <p style={{position:"absolute", bottom:"5px", textAlign:"left", fontSize:"0.8rem", marginLeft:"2vw"}}>By using us to price your data, you agree to our <a href="https://github.com/raghavmecheri/PriceMyDataDocuments/blob/master/TOC.md" target="_blank" style={{
+                <p className="readMore">Read more about this project <a href="">here</a></p>
+                <p className="readMore">Contribute to our <a href={pmdGit}>GitHub</a></p>
+                <p style={{position:"absolute", bottom:"5px", textAlign:"left", fontSize:"0.8rem", marginLeft:"2vw"}}>By using us to price your data, you agree to our <a href={pmdTOC} target="_blank" style={{
                     color: "#ffffff",
                     textDecoration: "underline"
                 }}>terms and conditions</a></p>

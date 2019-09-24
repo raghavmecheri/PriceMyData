@@ -15,8 +15,8 @@ import ReactLoading from 'react-loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const FB_TUTORIAL = "https://github.com/raghavmecheri/PriceMyDataDocuments/blob/master/FacebookData.md"
-const GOOG_TUTORIAL = "https://github.com/raghavmecheri/PriceMyDataDocuments/blob/master/GoogleData.md"
+const FB_TUTORIAL = "https://github.com/raghavmecheri/PriceMyData/blob/master/Documentation/FacebookData.md"
+const GOOG_TUTORIAL = "https://github.com/raghavmecheri/PriceMyData/blob/master/Documentation/GoogleData.md"
 
 const questionTypes = {
     "facebook": [

@@ -45,7 +45,7 @@ Please make sure to update tests as appropriate.
 N/A
 
 ## Contact
-Please contact Raghav Mecheri for more technical details.
+Please contact Raghav Mecheri for more details.
 
 ## References
 Ref: https://dev.to/kedar9/creating-a-node-app-with-react-webpack-4-babel-7-express-and-sass-3mae for project setup details

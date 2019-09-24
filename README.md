@@ -30,12 +30,6 @@ To build the project for production:
 npm run build
 ```
 
-To deploy, commit your changes and run:
-```bash
-git push heroku master
-```
-This should automatically build and deploy your project, as long as you have access to the PriceMyData Heroku CLI
-
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

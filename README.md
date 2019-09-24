@@ -1,6 +1,6 @@
 # PriceMyData
 [In Development] Project to crowdfund data valuations<br>
-Live <a href="https://www.pricemydata.com">here</a>
+Development version live <a href="https://www.pricemydata.com">here</a>
 
 ## Running the project
 

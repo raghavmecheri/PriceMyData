@@ -1,6 +1,6 @@
 # PriceMyData
 [In Development] Project to crowdfund data valuations<br>
-Live <a href="https://www.pricemydata.com">here</a>
+Development version live <a href="https://www.pricemydata.com">here</a>
 
 ## Running the project
 
@@ -30,22 +30,16 @@ To build the project for production:
 npm run build
 ```
 
-To deploy, commit your changes and run:
-```bash
-git push heroku master
-```
-This should automatically build and deploy your project, as long as you have access to the PriceMyData Heroku CLI
-
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+Please make sure to update tests (if any) as appropriate.
 
 ## License
 N/A
 
 ## Contact
-Please contact Raghav Mecheri for more technical details.
+Please contact Raghav Mecheri for more details.
 
 ## References
 Ref: https://dev.to/kedar9/creating-a-node-app-with-react-webpack-4-babel-7-express-and-sass-3mae for project setup details

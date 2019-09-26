@@ -9,7 +9,7 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
 import "../styles/HomeStyle.css"
 
-const CHANGE_URL = "https://binit.in";
+const CHANGE_URL = "https://www.change.org/p/pricemydata-we-should-get-a-cut-of-our-data-revenues?recruiter=946872792&utm_source=share_petition&utm_medium=copylink&utm_campaign=share_petition";
 
 const priceHoldStyle = {
     paddingRight: "1vh",
@@ -25,13 +25,18 @@ export default function RevealPrice(props) {
         currency: 'USD',
         minimumFractionDigits: 2
       })
+    let platform = props.platformName
     let advertisers = props.priceInfo.value.totalEntries.advertisers;
+    let amount = props.priceInfo.value.dataValue
+    if(amount == 0) {
+        alert("Hey! We couldn't help but notice that your resultant amount was $0. That's super rare - are you sure you uploaded the right .zip file?")
+    }
 
     return(
         <div className="vertCenter">
             <h4 className="centerTitle" style={priceHoldStyle}>Your Data's Value: {formatter.format(props.priceInfo.value.dataValue)}</h4>
             {
-                advertisers ? (
+                platform == "Facebook" ? (
                     <React.Fragment>
                     <h4 className="centerTitle" style={priceHoldStyle}>Advertisers who interact with your information: {advertisers}</h4>
                     <h4 className="centerTitle" style={priceHoldStyle}>If you took 10% on each advertiser sale: {formatter.format(props.priceInfo.value.dataValue*advertisers * 0.10)}</h4>

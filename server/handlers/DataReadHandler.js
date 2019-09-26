@@ -57,7 +57,7 @@ const processZipFile = (zipData, valueMap, fileStructure, entryMap, isGoogle) =>
                 resolve({dataValue, totalEntries})
                 // console.log(JSON.stringify(fileData));
             }).catch((err) => {
-
+                console.log("Caught inner error");
             })
             // console.log(dataValue);
             // console.log(advertisers);
@@ -155,6 +155,11 @@ const getNestedValue = (nestedValue, inputVector) => {
         let maxLen = nestedList.length;
         let count = 0;
         nestedList.forEach( async (element) => {
+            if(!childJson || !childJson.hasOwnProperty(element)) {
+                console.log("Absence of key. Returning")
+                // Prevents crashes when property is absent
+                resolve(0);
+            }
             childJson = childJson[element];
             count +=1;
             if(count >= maxLen) {

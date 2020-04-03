@@ -1,6 +1,5 @@
 # PriceMyData
-[In Development] Project to crowdfund data valuations<br>
-Development version live <a href="https://www.pricemydata.com">here</a>
+Project to crowdfund data valuations<br>
 
 ## Running the project
 
